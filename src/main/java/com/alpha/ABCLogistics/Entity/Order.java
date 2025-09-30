@@ -1,5 +1,6 @@
 package com.alpha.ABCLogistics.Entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
@@ -11,13 +12,13 @@ public class Order {
 	private String orderdate;
 	private String status="placed";
 	private int cost;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Carrier carrier;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Cargo cargo;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Loading loading;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private Unloading unloading;
 	public Order() {
 		super();
