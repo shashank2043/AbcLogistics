@@ -88,7 +88,7 @@ public class AdminController {
 		return driverService.deleteDriver(id);
 	}
 	@PostMapping("/saveorder")
-	public void saveOrder(@RequestBody OrderDto orderDto) {
+	public void saveOrder(@RequestBody @Valid OrderDto orderDto) {
 		orderService.saveOrder(orderDto);
 	}
 	

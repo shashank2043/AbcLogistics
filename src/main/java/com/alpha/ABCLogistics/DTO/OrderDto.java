@@ -1,14 +1,25 @@
 package com.alpha.ABCLogistics.DTO;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class OrderDto {
 	private int id;
 	private String orderdate;
 	private int cargoId;
 	private String cargoName;
 	private String cargoDescription;
+	@NotNull
+	@Positive
 	private int cargoWt;
+	@NotNull
+	@Positive
+	@Min(1)
 	private int cargoCount;
+	@NotNull
 	private int loadingAddId;
+	@NotNull
 	private int unloadingAddId;
 	public OrderDto() {
 		super();
