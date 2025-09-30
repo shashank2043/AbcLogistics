@@ -16,6 +16,7 @@ import com.alpha.ABCLogistics.DTO.TruckDto;
 import com.alpha.ABCLogistics.Entity.Address;
 import com.alpha.ABCLogistics.Entity.Carrier;
 import com.alpha.ABCLogistics.Entity.Driver;
+import com.alpha.ABCLogistics.Entity.Order;
 import com.alpha.ABCLogistics.Entity.Truck;
 import com.alpha.ABCLogistics.Service.AddressService;
 import com.alpha.ABCLogistics.Service.CarrierService;
@@ -64,7 +65,7 @@ public class AdminController {
 		return carrierService.deleteCarrier(id);
 	}
 	@PostMapping("/savetruck")
-	public ResponseEntity<ResponseStructure<Truck>> saveTruck(@RequestBody TruckDto truckDto) {
+	public ResponseEntity<ResponseStructure<Truck>> saveTruck(@RequestBody @Valid TruckDto truckDto) {
 		return truckService.saveTruck(truckDto);
 	}
 	@GetMapping("/findtruck")
@@ -88,8 +89,15 @@ public class AdminController {
 		return driverService.deleteDriver(id);
 	}
 	@PostMapping("/saveorder")
-	public void saveOrder(@RequestBody @Valid OrderDto orderDto) {
-		orderService.saveOrder(orderDto);
+	public ResponseEntity<ResponseStructure<Order>> saveOrder(@RequestBody @Valid OrderDto orderDto) {
+		return orderService.saveOrder(orderDto);
 	}
-	
+	@GetMapping("/findorder")
+	public ResponseEntity<ResponseStructure<Order>> findOrder(@RequestParam int id) {
+		return orderService.findOrder(id);
+	}
+	@DeleteMapping("/deleteorder")
+	public ResponseEntity<ResponseStructure<Order>> deleteOrder(@RequestParam int id) {
+		return orderService.deleteOrder(id);
+	}
 }

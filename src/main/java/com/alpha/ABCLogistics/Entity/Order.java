@@ -3,6 +3,7 @@ package com.alpha.ABCLogistics.Entity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -12,7 +13,7 @@ public class Order {
 	private String orderdate;
 	private String status="placed";
 	private int cost;
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Carrier carrier;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cargo cargo;

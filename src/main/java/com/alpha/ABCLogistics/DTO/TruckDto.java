@@ -1,9 +1,18 @@
 package com.alpha.ABCLogistics.DTO;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class TruckDto {
+	@NotNull
+	@Positive
 	private int id;
 	private String name;
+	@NotNull
+	@Positive
 	private int number;
+	@NotNull
+	@Positive
 	private int capacity;
 	private String status;
 	public TruckDto() {

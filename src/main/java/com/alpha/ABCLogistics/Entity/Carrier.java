@@ -1,14 +1,24 @@
 package com.alpha.ABCLogistics.Entity;
 
+import org.hibernate.validator.constraints.Email;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 public class Carrier {
 	@Id
+	@NotNull
+	@Positive
 	private int id;
 	private String name;
+//	@SuppressWarnings("deprecation")
+	@Email
 	private String mail;
+	@NotNull
+	@Positive
 	private long contact;
 
 	public Carrier() {

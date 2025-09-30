@@ -16,6 +16,7 @@ import com.alpha.ABCLogistics.DTO.ResponseStructure;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	//Handle Order Exceptions
 	@ExceptionHandler(AddressNotFoundException.class)
 	public ResponseEntity<ResponseStructure<String>> handleAddressNotFoundException() {
 		ResponseStructure<String> rs = new ResponseStructure<String>();
@@ -32,6 +33,7 @@ public class GlobalExceptionHandler {
 		rs.setData("Address Already Exists");
 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
 	}
+	//Handle Carrier Exceptions
 	@ExceptionHandler(CarrierNotFoundException.class)
 	public ResponseEntity<ResponseStructure<String>> handleCarrierNotFoundException() {
 		ResponseStructure<String> rs = new ResponseStructure<String>();
@@ -48,6 +50,7 @@ public class GlobalExceptionHandler {
 		rs.setData("Carrier Already Exists");
 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
 	}
+	//Handle Truck Exceptions
 	@ExceptionHandler(TruckNotFoundException.class)
 	public ResponseEntity<ResponseStructure<String>> handleTruckNotFoundException() {
 		ResponseStructure<String> rs = new ResponseStructure<String>();
@@ -64,6 +67,7 @@ public class GlobalExceptionHandler {
 		rs.setData("Truck Already Exists");
 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
 	}
+	//Handle Driver Exceptions
 	@ExceptionHandler(DriverNotFoundException.class)
 	public ResponseEntity<ResponseStructure<String>> handleDriverNotFoundException() {
 		ResponseStructure<String> rs = new ResponseStructure<>();
@@ -81,6 +85,24 @@ public class GlobalExceptionHandler {
 		rs.setData("Driver Already Exists");
 		return new ResponseEntity<>(rs, HttpStatus.NOT_ACCEPTABLE);
 	}
+	//Handle Order Exceptions
+	@ExceptionHandler(OrderNotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> handleOrderNotFoundException(OrderNotFoundException ex) {
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.NOT_FOUND.value());
+		rs.setMessage(ex.getMessage());
+		rs.setData("Order Not Found");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_FOUND);
+	}
+	@ExceptionHandler(OrderAlreadyExistsException.class)
+	public ResponseEntity<ResponseStructure<String>> handleOrderAlreadyExistsException(OrderAlreadyExistsException ex) {
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.NOT_ACCEPTABLE.value());
+		rs.setMessage(ex.getMessage());
+		rs.setData("Order Already Exists");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
+	}
+	//Handle Validation Exceptions
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ResponseStructure<Map<String, String>>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
 		List<FieldError> ferror = ex.getFieldErrors();
