@@ -16,7 +16,7 @@ import com.alpha.ABCLogistics.Repository.CarrierRepository;
 @Service
 public class CarrierService {
 	@Autowired
-	CarrierRepository carrierRepository;
+	private CarrierRepository carrierRepository;
 	public ResponseEntity<ResponseStructure<Carrier>> saveCarrier(Carrier carrier) {
 		Optional<Carrier> carrierOpt =carrierRepository.findById(carrier.getId());
 		if(carrierOpt.isPresent()) {

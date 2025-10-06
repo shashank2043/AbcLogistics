@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alpha.ABCLogistics.DTO.OrderDto;
 import com.alpha.ABCLogistics.DTO.ResponseStructure;
 import com.alpha.ABCLogistics.DTO.TruckDto;
 import com.alpha.ABCLogistics.Entity.Address;
@@ -39,6 +40,7 @@ public class AdminController {
 	DriverService driverService;
 	@Autowired
 	OrderService orderService;
+	//Address Routes
 	@PostMapping("/saveaddress")
 	public ResponseEntity<ResponseStructure<Address>> saveAddress(@RequestBody @Valid Address address)
 	{
@@ -52,6 +54,7 @@ public class AdminController {
 	public ResponseEntity<ResponseStructure<Address>> deleteAddress(@RequestParam int id) {
 		return addressService.deleteAddress(id);
 	}
+	//Carrier Routes
 	@PostMapping("/savecarrier")
 	public ResponseEntity<ResponseStructure<Carrier>> saveCarrier(@RequestBody Carrier carrier) {
 		return carrierService.saveCarrier(carrier);
@@ -64,6 +67,7 @@ public class AdminController {
 	public ResponseEntity<ResponseStructure<Carrier>> deleteCarrier(@RequestParam int id) {
 		return carrierService.deleteCarrier(id);
 	}
+	//Truck Routes
 	@PostMapping("/savetruck")
 	public ResponseEntity<ResponseStructure<Truck>> saveTruck(@RequestBody @Valid TruckDto truckDto) {
 		return truckService.saveTruck(truckDto);
@@ -76,6 +80,7 @@ public class AdminController {
 	public ResponseEntity<ResponseStructure<Truck>> deleteTruck(@RequestParam int id) {
 		return truckService.deleteTruck(id);
 	}
+	//Driver Routes
 	@PostMapping("/savedriver")
 	public ResponseEntity<ResponseStructure<Driver>> saveDriver(@RequestBody Driver driver) {
 		return driverService.saveDriver(driver);
@@ -88,10 +93,11 @@ public class AdminController {
 	public ResponseEntity<ResponseStructure<Driver>> deleteDriver(@RequestParam int id) {
 		return driverService.deleteDriver(id);
 	}
-	@PostMapping("/saveorder")
-	public ResponseEntity<ResponseStructure<Order>> saveOrder(@RequestBody @Valid OrderDto orderDto) {
-		return orderService.saveOrder(orderDto);
+	@PutMapping("/updatedriver/{driverid}/assignCarrier/{carrierid}/assigntruck/{truckid}")
+	public void updateDriver(@PathVariable int driverid,@PathVariable int carrierid,@PathVariable int truckid) {
+		driverService.updateDriver(driverid,carrierid,truckid);
 	}
+	//Order Routes
 	@GetMapping("/findorder")
 	public ResponseEntity<ResponseStructure<Order>> findOrder(@RequestParam int id) {
 		return orderService.findOrder(id);

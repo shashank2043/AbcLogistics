@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -116,5 +117,12 @@ public class GlobalExceptionHandler {
 		responseStructure.setData(validationmap);
 		return new ResponseEntity<ResponseStructure<Map<String,String>>>(responseStructure,HttpStatus.NOT_ACCEPTABLE);
 	}
-	
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ResponseEntity<ResponseStructure<String>> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+		ResponseStructure<String> responseStructure = new ResponseStructure<String>();
+		responseStructure.setMessage("Missing Parameters");
+		responseStructure.setData(ex.getMessage());
+		responseStructure.setStatuscode(HttpStatus.BAD_REQUEST.value());
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.BAD_REQUEST);
+	}
 }
