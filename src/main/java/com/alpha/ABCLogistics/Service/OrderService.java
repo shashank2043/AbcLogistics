@@ -50,9 +50,11 @@ public class OrderService {
 		Address unloadAdd = addressRepository.findById(dto.getUnloadingAddId()).orElseThrow(()->new AddressNotFoundException("Address with id " + dto.getUnloadingAddId() + " not found"));
 		unload.setAddress(unloadAdd);
 		odd.setUnloading(unload);
-		orderRepository.save(odd);
+		
+		Orders saved = orderRepository.save(odd);
 		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
-		responseStructure.setData(odd);
+		
+		responseStructure.setData(saved);
 		responseStructure.setMessage("Order saved successfully");
 		responseStructure.setStatuscode(HttpStatus.CREATED.value());
 		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.CREATED);

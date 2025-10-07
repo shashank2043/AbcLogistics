@@ -9,15 +9,20 @@ import org.springframework.stereotype.Service;
 
 import com.alpha.ABCLogistics.DTO.ResponseStructure;
 import com.alpha.ABCLogistics.DTO.TruckDto;
+import com.alpha.ABCLogistics.Entity.Carrier;
 import com.alpha.ABCLogistics.Entity.Truck;
+import com.alpha.ABCLogistics.Exception.CarrierNotFoundException;
 import com.alpha.ABCLogistics.Exception.TruckAlreadyPresentException;
 import com.alpha.ABCLogistics.Exception.TruckNotFoundException;
+import com.alpha.ABCLogistics.Repository.CarrierRepository;
 import com.alpha.ABCLogistics.Repository.TruckRepository;
 
 @Service
 public class TruckService {
 	@Autowired
 	TruckRepository truckRepository;
+	@Autowired
+	private CarrierRepository carrierRepository;
 
 	public ResponseEntity<ResponseStructure<Truck>> saveTruck(TruckDto truckDto) {
 		Optional<Truck> truckOptional = truckRepository.findById(truckDto.getId());
@@ -61,6 +66,18 @@ public class TruckService {
 		ResponseStructure<Truck> responseStructure = new ResponseStructure<Truck>();
 		responseStructure.setData(truck);
 		responseStructure.setMessage("Truck Deleted");;
+		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
+		return new ResponseEntity<ResponseStructure<Truck>>(responseStructure, HttpStatus.ACCEPTED);
+	}
+
+	public ResponseEntity<ResponseStructure<Truck>> updateTruck(int truckid, int carrierid) {
+		Truck truck = truckRepository.findById(truckid).orElseThrow(()->new TruckNotFoundException("Truck with id " + truckid + " not found"));
+		Carrier carrier = carrierRepository.findById(carrierid).orElseThrow(()->new CarrierNotFoundException("Carrier with id " + carrierid + " not found"));
+		truck.setCarrier(carrier);
+		truckRepository.save(truck);
+		ResponseStructure<Truck> responseStructure = new ResponseStructure<Truck>();
+		responseStructure.setData(truck);
+		responseStructure.setMessage("Truck Updated");;
 		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
 		return new ResponseEntity<ResponseStructure<Truck>>(responseStructure, HttpStatus.ACCEPTED);
 	}

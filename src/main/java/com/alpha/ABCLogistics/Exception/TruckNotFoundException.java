@@ -6,5 +6,11 @@ public class TruckNotFoundException extends RuntimeException {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	public TruckNotFoundException(String message) {
+		super(message);
+	}
+	public TruckNotFoundException() {
+		super();
+	}
+	
 }

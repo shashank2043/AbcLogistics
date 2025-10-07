@@ -81,6 +81,10 @@ public class AdminController {
 	public ResponseEntity<ResponseStructure<Truck>> deleteTruck(@RequestParam int id) {
 		return truckService.deleteTruck(id);
 	}
+	@PutMapping("/updatetruck/{truckid}/assignCarrier/{carrierid}")
+	public ResponseEntity<ResponseStructure<Truck>> updateTruck(@PathVariable int truckid,@PathVariable int carrierid) {
+		return truckService.updateTruck(truckid,carrierid);
+	}
 	//Driver Routes
 	@PostMapping("/savedriver")
 	public ResponseEntity<ResponseStructure<Driver>> saveDriver(@RequestBody DriverDto driverdto) {
