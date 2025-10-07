@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.ABCLogistics.DTO.OrderDto;
 import com.alpha.ABCLogistics.DTO.ResponseStructure;
-import com.alpha.ABCLogistics.Entity.Order;
+import com.alpha.ABCLogistics.Entity.Orders;
 import com.alpha.ABCLogistics.Service.OrderService;
 
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class UserController {
 	@Autowired
 	OrderService orderService;
 	@PostMapping("/saveorder")
-	public ResponseEntity<ResponseStructure<Order>> saveOrder(@RequestBody @Valid OrderDto orderDto) {
+	public ResponseEntity<ResponseStructure<Orders>> saveOrder(@RequestBody @Valid OrderDto orderDto) {
 		return orderService.saveOrder(orderDto);
 	}
 }

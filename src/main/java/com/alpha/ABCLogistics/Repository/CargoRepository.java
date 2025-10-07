@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.alpha.ABCLogistics.Entity.Cargo;
 
-public interface CargoService extends JpaRepository<Cargo, Integer>{
+public interface CargoRepository extends JpaRepository<Cargo, Integer>{
 
 }

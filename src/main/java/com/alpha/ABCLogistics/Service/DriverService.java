@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.alpha.ABCLogistics.DTO.DriverDto;
 import com.alpha.ABCLogistics.DTO.ResponseStructure;
 import com.alpha.ABCLogistics.Entity.Carrier;
 import com.alpha.ABCLogistics.Entity.Driver;
@@ -29,12 +30,16 @@ public class DriverService {
 	@Autowired
 	private CarrierRepository carrierRepository;
 
-	public ResponseEntity<ResponseStructure<Driver>> saveDriver(Driver driver) {
+	public ResponseEntity<ResponseStructure<Driver>> saveDriver(DriverDto driver) {
 		Optional<Driver> driverOpt = driverRepository.findById(driver.getId());
 		if (driverOpt.isPresent()) {
 			throw new DriverAlreadyPresentException();
 		}
-		Driver savedDriver = driverRepository.save(driver);
+		Driver d = new Driver();
+		d.setId(driver.getId());
+		d.setName(driver.getName());
+		d.setContact(driver.getContact());
+		Driver savedDriver = driverRepository.save(d);
 
 		ResponseStructure<Driver> responseStructure = new ResponseStructure<>();
 		responseStructure.setData(savedDriver);
@@ -78,7 +83,7 @@ public class DriverService {
 	public ResponseEntity<ResponseStructure<Driver>> updateDriver(int driverid, int carrierid, int truckid) {
 		Truck t = truckRepository.findById(truckid).orElseThrow(() -> new TruckNotFoundException());
 		Driver d = driverRepository.findById(driverid).orElseThrow(() -> new DriverNotFoundException());
-		Carrier c = carrierRepository.findById(truckid).orElseThrow(() -> new CarrierNotFoundException());
+		Carrier c = carrierRepository.findById(carrierid).orElseThrow(() -> new CarrierNotFoundException());
 		d.setTruck(t);
 		d.setCarrier(c);
 		Driver savedDriver = driverRepository.save(d);

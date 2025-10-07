@@ -10,14 +10,14 @@ import com.alpha.ABCLogistics.DTO.ResponseStructure;
 import com.alpha.ABCLogistics.Entity.Address;
 import com.alpha.ABCLogistics.Entity.Cargo;
 import com.alpha.ABCLogistics.Entity.Loading;
-import com.alpha.ABCLogistics.Entity.Order;
+import com.alpha.ABCLogistics.Entity.Orders;
 import com.alpha.ABCLogistics.Entity.Unloading;
 import com.alpha.ABCLogistics.Exception.AddressNotFoundException;
 import com.alpha.ABCLogistics.Exception.CargoAlreadyExistsException;
 import com.alpha.ABCLogistics.Exception.OrderAlreadyExistsException;
 import com.alpha.ABCLogistics.Exception.OrderNotFoundException;
 import com.alpha.ABCLogistics.Repository.AddressRepository;
-import com.alpha.ABCLogistics.Repository.CargoService;
+import com.alpha.ABCLogistics.Repository.CargoRepository;
 import com.alpha.ABCLogistics.Repository.OrderRepository;
 
 @Service
@@ -27,9 +27,9 @@ public class OrderService {
 	@Autowired
 	OrderRepository orderRepository;
 	@Autowired
-	CargoService cargoService;
-	public ResponseEntity<ResponseStructure<Order>> saveOrder(OrderDto dto) {
-		Order odd = new Order();
+	CargoRepository cargoRepository;
+	public ResponseEntity<ResponseStructure<Orders>> saveOrder(OrderDto dto) {
+		Orders odd = new Orders();
 		if(orderRepository.existsById(dto.getId())) {
 			throw new OrderAlreadyExistsException("Order with id " + dto.getId() + " already exists");
 		}			
@@ -37,7 +37,7 @@ public class OrderService {
 		odd.setOrderdate(dto.getOrderdate());
 		int cost = 10*(dto.getCargoWt()*dto.getCargoCount());
 		odd.setCost(cost);
-		if(cargoService.existsById(dto.getCargoId())) {
+		if(cargoRepository.existsById(dto.getCargoId())) {
 			throw new CargoAlreadyExistsException("Cargo with id " + dto.getCargoId() + " already exists");
 		}
 		Cargo cargo = new Cargo(dto.getCargoId(), dto.getCargoName(), dto.getCargoDescription(), dto.getCargoWt(), dto.getCargoCount());
@@ -51,28 +51,28 @@ public class OrderService {
 		unload.setAddress(unloadAdd);
 		odd.setUnloading(unload);
 		orderRepository.save(odd);
-		ResponseStructure<Order> responseStructure = new ResponseStructure<Order>();
+		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
 		responseStructure.setData(odd);
 		responseStructure.setMessage("Order saved successfully");
 		responseStructure.setStatuscode(HttpStatus.CREATED.value());
-		return new ResponseEntity<ResponseStructure<Order>>(responseStructure, HttpStatus.CREATED);
+		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.CREATED);
 	}
-	public ResponseEntity<ResponseStructure<Order>> findOrder(int id) {
-		Order order = orderRepository.findById(id).orElseThrow(()->new OrderNotFoundException("Order with id " + id + " not found"));
-		ResponseStructure<Order> responseStructure = new ResponseStructure<Order>();
+	public ResponseEntity<ResponseStructure<Orders>> findOrder(int id) {
+		Orders order = orderRepository.findById(id).orElseThrow(()->new OrderNotFoundException("Order with id " + id + " not found"));
+		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
 		responseStructure.setData(order);
 		responseStructure.setMessage("Order found successfully");
 		responseStructure.setStatuscode(HttpStatus.FOUND.value());
-		return new ResponseEntity<ResponseStructure<Order>>(responseStructure, HttpStatus.FOUND);
+		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.FOUND);
 	}
-	public ResponseEntity<ResponseStructure<Order>> deleteOrder(int id) {
-		Order order = orderRepository.findById(id).orElseThrow(()->new OrderNotFoundException("Order with id " + id + " not found"));
+	public ResponseEntity<ResponseStructure<Orders>> deleteOrder(int id) {
+		Orders order = orderRepository.findById(id).orElseThrow(()->new OrderNotFoundException("Order with id " + id + " not found"));
 		orderRepository.delete(order);
-		ResponseStructure<Order> responseStructure = new ResponseStructure<Order>();
+		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
 		responseStructure.setData(order);
 		responseStructure.setMessage("Order deleted successfully");
 		responseStructure.setStatuscode(HttpStatus.OK.value());
-		return new ResponseEntity<ResponseStructure<Order>>(responseStructure, HttpStatus.OK);
+		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.OK);
 	}
 	
 

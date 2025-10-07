@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alpha.ABCLogistics.DTO.DriverDto;
 import com.alpha.ABCLogistics.DTO.ResponseStructure;
 import com.alpha.ABCLogistics.DTO.TruckDto;
 import com.alpha.ABCLogistics.Entity.Address;
 import com.alpha.ABCLogistics.Entity.Carrier;
 import com.alpha.ABCLogistics.Entity.Driver;
-import com.alpha.ABCLogistics.Entity.Order;
+import com.alpha.ABCLogistics.Entity.Orders;
 import com.alpha.ABCLogistics.Entity.Truck;
 import com.alpha.ABCLogistics.Service.AddressService;
 import com.alpha.ABCLogistics.Service.CarrierService;
@@ -82,8 +83,8 @@ public class AdminController {
 	}
 	//Driver Routes
 	@PostMapping("/savedriver")
-	public ResponseEntity<ResponseStructure<Driver>> saveDriver(@RequestBody Driver driver) {
-		return driverService.saveDriver(driver);
+	public ResponseEntity<ResponseStructure<Driver>> saveDriver(@RequestBody DriverDto driverdto) {
+		return driverService.saveDriver(driverdto);
 	}
 	@GetMapping("/finddriver")
 	public ResponseEntity<ResponseStructure<Driver>> findDriver(@RequestParam int id) {
@@ -94,16 +95,16 @@ public class AdminController {
 		return driverService.deleteDriver(id);
 	}
 	@PutMapping("/updatedriver/{driverid}/assignCarrier/{carrierid}/assigntruck/{truckid}")
-	public void updateDriver(@PathVariable int driverid,@PathVariable int carrierid,@PathVariable int truckid) {
-		driverService.updateDriver(driverid,carrierid,truckid);
+	public ResponseEntity<ResponseStructure<Driver>> updateDriver(@PathVariable int driverid,@PathVariable int carrierid,@PathVariable int truckid) {
+		return driverService.updateDriver(driverid,carrierid,truckid);
 	}
 	//Order Routes
 	@GetMapping("/findorder")
-	public ResponseEntity<ResponseStructure<Order>> findOrder(@RequestParam int id) {
+	public ResponseEntity<ResponseStructure<Orders>> findOrder(@RequestParam int id) {
 		return orderService.findOrder(id);
 	}
 	@DeleteMapping("/deleteorder")
-	public ResponseEntity<ResponseStructure<Order>> deleteOrder(@RequestParam int id) {
+	public ResponseEntity<ResponseStructure<Orders>> deleteOrder(@RequestParam int id) {
 		return orderService.deleteOrder(id);
 	}
 }

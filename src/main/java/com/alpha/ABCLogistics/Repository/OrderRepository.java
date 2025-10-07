@@ -3,9 +3,9 @@ package com.alpha.ABCLogistics.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.alpha.ABCLogistics.Entity.Order;
+import com.alpha.ABCLogistics.Entity.Orders;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Integer>{
+public interface OrderRepository extends JpaRepository<Orders, Integer>{
 	
 }

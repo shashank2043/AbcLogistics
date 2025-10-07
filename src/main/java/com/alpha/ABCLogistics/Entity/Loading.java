@@ -1,15 +1,21 @@
 package com.alpha.ABCLogistics.Entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 @Entity
 public class Loading {
 	@Id
+	@SequenceGenerator(name = "loading_seq", sequenceName = "order_sequence_701", initialValue = 701, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "loading_seq")
 	private int id;
 	private String date;
 	private String time;
-	@OneToOne
+	@ManyToOne
 	private Address address;
 	public Loading() {
 		super();

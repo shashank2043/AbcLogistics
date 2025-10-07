@@ -7,7 +7,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Order {
+public class Orders {
 	@Id
 	private int id;
 	private String orderdate;
@@ -21,10 +21,10 @@ public class Order {
 	private Loading loading;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Unloading unloading;
-	public Order() {
+	public Orders() {
 		super();
 	}
-	public Order(int id, String orderdate, String status, int cost, Carrier carrier, Cargo cargo, Loading loading,
+	public Orders(int id, String orderdate, String status, int cost, Carrier carrier, Cargo cargo, Loading loading,
 			Unloading unloading) {
 		super();
 		this.id = id;
