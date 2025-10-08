@@ -41,6 +41,7 @@ public class AdminController {
 	DriverService driverService;
 	@Autowired
 	OrderService orderService;
+	
 	//Address Routes
 	@PostMapping("/saveaddress")
 	public ResponseEntity<ResponseStructure<Address>> saveAddress(@RequestBody @Valid Address address)
@@ -110,5 +111,9 @@ public class AdminController {
 	@DeleteMapping("/deleteorder")
 	public ResponseEntity<ResponseStructure<Orders>> deleteOrder(@RequestParam int id) {
 		return orderService.deleteOrder(id);
+	}
+	@PutMapping("/updateorder/{orderid}/assignCarrier/{truckid}")
+	public ResponseEntity<ResponseStructure<Orders>> updateorder(@PathVariable int orderid,@PathVariable int truckid) {
+		return orderService.updateOrder(orderid,truckid);
 	}
 }

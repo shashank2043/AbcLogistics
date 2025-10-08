@@ -86,6 +86,9 @@ public class DriverService {
 		Carrier c = carrierRepository.findById(carrierid).orElseThrow(() -> new CarrierNotFoundException());
 		d.setTruck(t);
 		d.setCarrier(c);
+		t.setCarrier(c);
+		
+		truckRepository.save(t);
 		Driver savedDriver = driverRepository.save(d);
 
 		ResponseStructure<Driver> responseStructure = new ResponseStructure<>();

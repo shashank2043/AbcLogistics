@@ -11,14 +11,18 @@ import com.alpha.ABCLogistics.Entity.Address;
 import com.alpha.ABCLogistics.Entity.Cargo;
 import com.alpha.ABCLogistics.Entity.Loading;
 import com.alpha.ABCLogistics.Entity.Orders;
+import com.alpha.ABCLogistics.Entity.Truck;
 import com.alpha.ABCLogistics.Entity.Unloading;
 import com.alpha.ABCLogistics.Exception.AddressNotFoundException;
 import com.alpha.ABCLogistics.Exception.CargoAlreadyExistsException;
 import com.alpha.ABCLogistics.Exception.OrderAlreadyExistsException;
 import com.alpha.ABCLogistics.Exception.OrderNotFoundException;
+import com.alpha.ABCLogistics.Exception.TruckCapacityExceededException;
+import com.alpha.ABCLogistics.Exception.TruckNotFoundException;
 import com.alpha.ABCLogistics.Repository.AddressRepository;
 import com.alpha.ABCLogistics.Repository.CargoRepository;
 import com.alpha.ABCLogistics.Repository.OrderRepository;
+import com.alpha.ABCLogistics.Repository.TruckRepository;
 
 @Service
 public class OrderService {
@@ -28,6 +32,8 @@ public class OrderService {
 	OrderRepository orderRepository;
 	@Autowired
 	CargoRepository cargoRepository;
+	@Autowired
+	TruckRepository truckRepository;
 	public ResponseEntity<ResponseStructure<Orders>> saveOrder(OrderDto dto) {
 		Orders odd = new Orders();
 		if(orderRepository.existsById(dto.getId())) {
@@ -75,6 +81,25 @@ public class OrderService {
 		responseStructure.setMessage("Order deleted successfully");
 		responseStructure.setStatuscode(HttpStatus.OK.value());
 		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.OK);
+	}
+	public ResponseEntity<ResponseStructure<Orders>> updateOrder(int orderid, int truckid) {
+		Orders ord = orderRepository.findById(orderid).orElseThrow(()->new OrderNotFoundException("Order with id " + orderid + " not found"));
+		Truck truck = truckRepository.findById(truckid).orElseThrow(()->new TruckNotFoundException("Truck with id " + truckid + " not found"));
+		int totalwtoforder = (ord.getCargo().getWeight()*ord.getCargo().getCount());
+		int truckcapacity = truck.getCapacity();
+		if(truckcapacity>=totalwtoforder) {
+			ord.setCarrier(truck.getCarrier());
+			truck.setCapacity(truck.getCapacity()-totalwtoforder);
+			truckRepository.save(truck);
+			orderRepository.save(ord);
+		}else {
+			throw new TruckCapacityExceededException("Order weight "+totalwtoforder+" exceeds the available capacity of truck "+truckcapacity);
+		}
+		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
+		responseStructure.setData(ord);
+		responseStructure.setMessage("Order deleted successfully");
+		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
+		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.ACCEPTED);
 	}
 	
 
