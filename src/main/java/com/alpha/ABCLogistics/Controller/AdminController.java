@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.ABCLogistics.DTO.DriverDto;
+import com.alpha.ABCLogistics.DTO.LoadingDto;
 import com.alpha.ABCLogistics.DTO.ResponseStructure;
 import com.alpha.ABCLogistics.DTO.TruckDto;
 import com.alpha.ABCLogistics.Entity.Address;
@@ -115,5 +116,9 @@ public class AdminController {
 	@PutMapping("/updateorder/{orderid}/assignCarrier/{truckid}")
 	public ResponseEntity<ResponseStructure<Orders>> updateorder(@PathVariable int orderid,@PathVariable int truckid) {
 		return orderService.updateOrder(orderid,truckid);
+	}
+	@PutMapping("/updateorder/{orderid}/updateLoading")
+	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateLoading(@PathVariable int orderid,@RequestBody LoadingDto ldto) {
+		return orderService.updateOrderupdateLoading(orderid,ldto);
 	}
 }

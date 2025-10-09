@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.alpha.ABCLogistics.DTO.LoadingDto;
 import com.alpha.ABCLogistics.DTO.OrderDto;
 import com.alpha.ABCLogistics.DTO.ResponseStructure;
 import com.alpha.ABCLogistics.Entity.Address;
@@ -92,15 +93,26 @@ public class OrderService {
 			truck.setCapacity(truck.getCapacity()-totalwtoforder);
 			truckRepository.save(truck);
 			orderRepository.save(ord);
+			
 		}else {
 			throw new TruckCapacityExceededException("Order weight "+totalwtoforder+" exceeds the available capacity of truck "+truckcapacity);
 		}
 		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
 		responseStructure.setData(ord);
-		responseStructure.setMessage("Order deleted successfully");
+		responseStructure.setMessage("Order updated successfully");
 		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
 		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.ACCEPTED);
 	}
-	
-
+	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateLoading(int orderid, LoadingDto ldto) {
+		Orders o = findOrder(orderid).getBody().getData();
+		o.getLoading().setDate(ldto.getDate());
+		o.getLoading().setTime(ldto.getTime());
+		o.setStatus("pending"); 
+		Orders saved = orderRepository.save(o);
+		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
+		responseStructure.setData(saved);
+		responseStructure.setMessage("Order updated successfully");
+		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
+		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.ACCEPTED);
+	}
 }

@@ -9,7 +9,4 @@ public class TruckCapacityExceededException extends RuntimeException {
 	public TruckCapacityExceededException() {
 		super();
 	}
-
-	
-
 }
