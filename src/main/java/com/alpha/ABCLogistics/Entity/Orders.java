@@ -13,6 +13,9 @@ public class Orders {
 	private String orderdate;
 	private String status="placed";
 	private int cost;
+	private String email;
+	
+	
 	@ManyToOne
 	private Carrier carrier;
 	@OneToOne(cascade = CascadeType.ALL)
@@ -24,18 +27,21 @@ public class Orders {
 	public Orders() {
 		super();
 	}
-	public Orders(int id, String orderdate, String status, int cost, Carrier carrier, Cargo cargo, Loading loading,
-			Unloading unloading) {
+	
+	public Orders(int id, String orderdate, String status, int cost, String email, Carrier carrier, Cargo cargo,
+			Loading loading, Unloading unloading) {
 		super();
 		this.id = id;
 		this.orderdate = orderdate;
 		this.status = status;
 		this.cost = cost;
+		this.email = email;
 		this.carrier = carrier;
 		this.cargo = cargo;
 		this.loading = loading;
 		this.unloading = unloading;
 	}
+
 	public int getId() {
 		return id;
 	}
@@ -83,5 +89,11 @@ public class Orders {
 	}
 	public void setUnloading(Unloading unloading) {
 		this.unloading = unloading;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

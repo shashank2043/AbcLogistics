@@ -121,4 +121,8 @@ public class AdminController {
 	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateLoading(@PathVariable int orderid,@RequestBody LoadingDto ldto) {
 		return orderService.updateOrderupdateLoading(orderid,ldto);
 	}
+	@PutMapping("/updateorder/{orderid}/updateUnloading")
+	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateUnloading(@PathVariable int orderid,@RequestBody LoadingDto ldto) {
+		return orderService.updateOrderupdateUnloading(orderid,ldto);
+	}
 }

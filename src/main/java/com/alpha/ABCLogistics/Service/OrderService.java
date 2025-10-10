@@ -93,7 +93,6 @@ public class OrderService {
 			truck.setCapacity(truck.getCapacity()-totalwtoforder);
 			truckRepository.save(truck);
 			orderRepository.save(ord);
-			
 		}else {
 			throw new TruckCapacityExceededException("Order weight "+totalwtoforder+" exceeds the available capacity of truck "+truckcapacity);
 		}
@@ -111,7 +110,19 @@ public class OrderService {
 		Orders saved = orderRepository.save(o);
 		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
 		responseStructure.setData(saved);
-		responseStructure.setMessage("Order updated successfully");
+		responseStructure.setMessage("Order Loading updated successfully");
+		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
+		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.ACCEPTED);
+	}
+	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateUnloading(int orderid, LoadingDto ldto) {
+		Orders o = findOrder(orderid).getBody().getData();
+		o.getUnloading().setDate(ldto.getDate());
+		o.getUnloading().setTime(ldto.getTime());
+		o.setStatus("pending"); 
+		Orders saved = orderRepository.save(o);
+		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
+		responseStructure.setData(saved);
+		responseStructure.setMessage("Order Unloading updated successfully");
 		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
 		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.ACCEPTED);
 	}
