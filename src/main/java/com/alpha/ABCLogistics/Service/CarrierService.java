@@ -25,7 +25,7 @@ public class CarrierService {
 		Carrier savedCarrier = carrierRepository.save(carrier);
 		ResponseStructure<Carrier> responseStructure = new ResponseStructure<Carrier>();
 		responseStructure.setData(savedCarrier);
-		responseStructure.setMessage("Address Saved");
+		responseStructure.setMessage("Carrier Saved");
 		responseStructure.setStatuscode(HttpStatus.CREATED.value());
 		return new ResponseEntity<ResponseStructure<Carrier>>(responseStructure, HttpStatus.ACCEPTED);
 	}
@@ -37,7 +37,7 @@ public class CarrierService {
 		Carrier carrier = carrierOpt.get();
 		ResponseStructure<Carrier> responseStructure = new ResponseStructure<Carrier>();
 		responseStructure.setData(carrier);
-		responseStructure.setMessage("Address Found");
+		responseStructure.setMessage("Carrier Found");
 		responseStructure.setStatuscode(HttpStatus.FOUND.value());
 		return new ResponseEntity<ResponseStructure<Carrier>>(responseStructure, HttpStatus.FOUND);
 	}
@@ -50,7 +50,7 @@ public class CarrierService {
 		carrierRepository.delete(carrier);
 		ResponseStructure<Carrier> responseStructure = new ResponseStructure<Carrier>();
 		responseStructure.setData(carrier);
-		responseStructure.setMessage("Address Deleted");
+		responseStructure.setMessage("Carrier Deleted");
 		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
 		return new ResponseEntity<ResponseStructure<Carrier>>(responseStructure, HttpStatus.ACCEPTED);
 		
