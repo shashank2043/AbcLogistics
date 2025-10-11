@@ -1,5 +1,6 @@
 package com.alpha.ABCLogistics.DTO;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -7,6 +8,8 @@ import jakarta.validation.constraints.Positive;
 public class OrderDto {
 	private int id;
 	private String orderdate;
+	@Email
+	private String email;
 	private int cargoId;
 	private String cargoName;
 	private String cargoDescription;
@@ -24,11 +27,14 @@ public class OrderDto {
 	public OrderDto() {
 		super();
 	}
-	public OrderDto(int id, String orderdate, int cargoId, String cargoName, String cargoDescription, int cargoWt,
-			int cargoCount, int loadingAddId, int unloadingAddId) {
+
+	public OrderDto(int id, String orderdate, String email, int cargoId, String cargoName, String cargoDescription,
+			@NotNull @Positive int cargoWt, @NotNull @Positive @Min(1) int cargoCount, @NotNull int loadingAddId,
+			@NotNull int unloadingAddId) {
 		super();
 		this.id = id;
 		this.orderdate = orderdate;
+		this.email = email;
 		this.cargoId = cargoId;
 		this.cargoName = cargoName;
 		this.cargoDescription = cargoDescription;
@@ -37,6 +43,7 @@ public class OrderDto {
 		this.loadingAddId = loadingAddId;
 		this.unloadingAddId = unloadingAddId;
 	}
+
 	public int getId() {
 		return id;
 	}
@@ -90,5 +97,11 @@ public class OrderDto {
 	}
 	public void setUnloadingAddId(int unloadingAddId) {
 		this.unloadingAddId = unloadingAddId;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

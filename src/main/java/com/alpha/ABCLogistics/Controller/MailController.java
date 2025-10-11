@@ -12,9 +12,9 @@ public class MailController {
 	MailService mailService;
 	@PostMapping("/sendmail")
 	public void sendMail() {
-		String tomail = "shashankpulluri1@gmail.com";
-		String sub = "Offer Letter";
-		String content = "You are slected for the job";
+		String tomail = "shashankpulluri5@gmail.com";
+		String sub = "Test Mail";
+		String content = "This is a test mail";
 		mailService.sendMail(tomail, sub, content);
 	}
 }

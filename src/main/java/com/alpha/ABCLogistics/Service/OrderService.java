@@ -35,6 +35,9 @@ public class OrderService {
 	CargoRepository cargoRepository;
 	@Autowired
 	TruckRepository truckRepository;
+	@Autowired
+	MailService mailService;
+	
 	public ResponseEntity<ResponseStructure<Orders>> saveOrder(OrderDto dto) {
 		Orders odd = new Orders();
 		if(orderRepository.existsById(dto.getId())) {
@@ -42,6 +45,7 @@ public class OrderService {
 		}			
 		odd.setId(dto.getId());
 		odd.setOrderdate(dto.getOrderdate());
+		odd.setEmail(dto.getEmail());
 		int cost = 10*(dto.getCargoWt()*dto.getCargoCount());
 		odd.setCost(cost);
 		if(cargoRepository.existsById(dto.getCargoId())) {
@@ -49,21 +53,36 @@ public class OrderService {
 		}
 		Cargo cargo = new Cargo(dto.getCargoId(), dto.getCargoName(), dto.getCargoDescription(), dto.getCargoWt(), dto.getCargoCount());
 		odd.setCargo(cargo);
+		
 		Loading load = new Loading();
 		Address loadAdd = addressRepository.findById(dto.getLoadingAddId()).orElseThrow(()->new AddressNotFoundException("Address with id " + dto.getLoadingAddId() + " not found"));
 		load.setAddress(loadAdd);
 		odd.setLoading(load);
+		
 		Unloading unload = new Unloading();
 		Address unloadAdd = addressRepository.findById(dto.getUnloadingAddId()).orElseThrow(()->new AddressNotFoundException("Address with id " + dto.getUnloadingAddId() + " not found"));
 		unload.setAddress(unloadAdd);
 		odd.setUnloading(unload);
 		
 		Orders saved = orderRepository.save(odd);
-		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
 		
+		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
 		responseStructure.setData(saved);
 		responseStructure.setMessage("Order saved successfully");
 		responseStructure.setStatuscode(HttpStatus.CREATED.value());
+		
+		String subject = "Order Confirmation – Your Order Has Been Placed Successfully";
+
+		String content = "Dear Customer,\n\n" + "Thank you for placing your order with ABC Logistics.\n\n"
+				+ "Here are your order details:\n" + "------------------------------------\n" + "From: "
+				+ saved.getLoading().getAddress().getCity() + "\n" + "To: "
+				+ saved.getUnloading().getAddress().getCity() + "\n" + "Total Cost: ₹" + saved.getCost() + "\n"
+				+ "Order Date: " + saved.getOrderdate() + "\n" + "Order ID: " + saved.getId() + "\n"
+				+ "------------------------------------\n\n"
+				+ "You will receive further updates once a carrier is assigned.\n\n"
+				+ "Thank you for choosing ABC Logistics.\n\n" + "Best regards,\n" + "ABC Logistics Team";
+		mailService.sendMail(saved.getEmail(), subject, content);
+		
 		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.CREATED);
 	}
 	public ResponseEntity<ResponseStructure<Orders>> findOrder(int id) {
@@ -88,42 +107,85 @@ public class OrderService {
 		Truck truck = truckRepository.findById(truckid).orElseThrow(()->new TruckNotFoundException("Truck with id " + truckid + " not found"));
 		int totalwtoforder = (ord.getCargo().getWeight()*ord.getCargo().getCount());
 		int truckcapacity = truck.getCapacity();
+		Orders saved = ord;
 		if(truckcapacity>=totalwtoforder) {
 			ord.setCarrier(truck.getCarrier());
 			truck.setCapacity(truck.getCapacity()-totalwtoforder);
 			truckRepository.save(truck);
-			orderRepository.save(ord);
+			saved = orderRepository.save(ord);
 		}else {
 			throw new TruckCapacityExceededException("Order weight "+totalwtoforder+" exceeds the available capacity of truck "+truckcapacity);
 		}
 		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
-		responseStructure.setData(ord);
+		responseStructure.setData(saved);
 		responseStructure.setMessage("Order updated successfully");
 		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
+		
+		String sub = "Carrier Assigned For Order";
+		String content = "Dear Customer,\n\n"
+			    + "Your order has been successfully assigned to the following carrier:\n\n"
+			    + "Carrier Name: " + saved.getCarrier().getName() + "\n"
+			    + "Contact Number: " + saved.getCarrier().getContact() + "\n"
+			    + "Email: " + saved.getCarrier().getMail() + "\n\n"
+			    + "You will be contacted soon for further updates.\n\n"
+			    + "Thank you for choosing our service.";
+		mailService.sendMail(saved.getEmail(), sub, content);
+		
 		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.ACCEPTED);
 	}
 	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateLoading(int orderid, LoadingDto ldto) {
 		Orders o = findOrder(orderid).getBody().getData();
 		o.getLoading().setDate(ldto.getDate());
 		o.getLoading().setTime(ldto.getTime());
-		o.setStatus("pending"); 
+		o.setStatus("transit"); 
 		Orders saved = orderRepository.save(o);
 		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
 		responseStructure.setData(saved);
 		responseStructure.setMessage("Order Loading updated successfully");
 		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
+		String subject = "Order Loaded into the Truck";
+
+		String content = "Dear Customer,\n\n"
+		    + "We’re pleased to inform you that your order (Order ID: " + saved.getId() + ") "
+		    + "has been successfully loaded into the truck and is now ready for dispatch.\n\n"
+		    + "Loading Details:\n"
+		    + "------------------------------------\n"
+		    + "Loading City: " + saved.getLoading().getAddress().getCity() + "\n"
+		    + "Date: " + saved.getLoading().getDate() + "\n"
+		    + "Time: " + saved.getLoading().getTime() + "\n"
+		    + "------------------------------------\n\n"
+		    + "Your order is currently in the 'Transit' stage and will be on its way shortly.\n\n"
+		    + "Thank you for choosing ABC Logistics.\n\n"
+		    + "Best regards,\n"
+		    + "ABC Logistics Team";
+		
+		mailService.sendMail(saved.getEmail(), subject, content);
 		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.ACCEPTED);
 	}
 	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateUnloading(int orderid, LoadingDto ldto) {
 		Orders o = findOrder(orderid).getBody().getData();
 		o.getUnloading().setDate(ldto.getDate());
 		o.getUnloading().setTime(ldto.getTime());
-		o.setStatus("pending"); 
+		o.setStatus("delivered"); 
 		Orders saved = orderRepository.save(o);
 		ResponseStructure<Orders> responseStructure = new ResponseStructure<Orders>();
 		responseStructure.setData(saved);
 		responseStructure.setMessage("Order Unloading updated successfully");
 		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
+		String subject ="Order Delivered Successfully";
+		String content = "Dear Customer,\n\n"
+			    + "We’re happy to inform you that your order (Order ID: " + saved.getId() + ") "
+			    + "has been successfully delivered to its destination.\n\n"
+			    + "Delivery Details:\n"
+			    + "------------------------------------\n"
+			    + "Destination City: " + saved.getUnloading().getAddress().getCity() + "\n"
+			    + "Date: " + saved.getUnloading().getDate() + "\n"
+			    + "Time: " + saved.getUnloading().getTime() + "\n"
+			    + "------------------------------------\n\n"
+			    + "Thank you for choosing ABC Logistics. We hope to serve you again soon.\n\n"
+			    + "Best regards,\n"
+			    + "ABC Logistics Team";
+		mailService.sendMail(saved.getEmail(), subject, content);
 		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.ACCEPTED);
 	}
 }
