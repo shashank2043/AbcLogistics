@@ -68,6 +68,14 @@ public class GlobalExceptionHandler {
 		rs.setData("Truck Already Exists");
 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
 	}
+	@ExceptionHandler(TruckCapacityExceededException.class)
+	public ResponseEntity<ResponseStructure<String>> handleTruckCapacityExceededException(TruckCapacityExceededException ex) {
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.NOT_ACCEPTABLE.value());
+		rs.setMessage(ex.getMessage());
+		rs.setData("Truck Capacity Exceeded");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
+	}
 	//Handle Driver Exceptions
 	@ExceptionHandler(DriverNotFoundException.class)
 	public ResponseEntity<ResponseStructure<String>> handleDriverNotFoundException() {
