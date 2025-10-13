@@ -1,7 +1,11 @@
 package com.alpha.ABCLogistics.DTO;
 
+import jakarta.validation.constraints.NotNull;
+
 public class LoadingDto {
+	@NotNull
 	private String date;
+	@NotNull
 	private String time;
 	public LoadingDto(String date, String time) {
 		super();

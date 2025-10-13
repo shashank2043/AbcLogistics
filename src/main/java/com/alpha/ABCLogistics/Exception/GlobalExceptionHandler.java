@@ -103,6 +103,38 @@ public class GlobalExceptionHandler {
 		rs.setData("Order Already Exists");
 		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
 	}
+	@ExceptionHandler(OrderCannotBeCancelledException.class)
+	public ResponseEntity<ResponseStructure<String>> handleOrderCannotBeCancelledException(OrderCannotBeCancelledException ex) {
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.NOT_ACCEPTABLE.value());
+		rs.setMessage(ex.getMessage());
+		rs.setData("Order Cannot Be Cancelled");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
+	}
+	@ExceptionHandler(OrderCannotBeLoadedException.class)
+	public ResponseEntity<ResponseStructure<String>> handleOrderCannotBeLoadedException(OrderCannotBeLoadedException ex) {
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.NOT_ACCEPTABLE.value());
+		rs.setMessage(ex.getMessage());
+		rs.setData("Order Cannot Be Loaded");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
+	}
+	@ExceptionHandler(OrderCannotBeUnloadedException.class)
+	public ResponseEntity<ResponseStructure<String>> handleOrderCannotBeLoadedException(OrderCannotBeUnloadedException ex) {
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.NOT_ACCEPTABLE.value());
+		rs.setMessage(ex.getMessage());
+		rs.setData("Order Cannot Be Unloaded");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
+	}
+	@ExceptionHandler(CargoAlreadyExistsException.class)
+	public ResponseEntity<ResponseStructure<String>> handleCargoAlreadyExistsException(CargoAlreadyExistsException ex) {
+		ResponseStructure<String> rs = new ResponseStructure<String>();
+		rs.setStatuscode(HttpStatus.NOT_ACCEPTABLE.value());
+		rs.setMessage(ex.getMessage());
+		rs.setData("Order Cannot Be Unloaded");
+		return new ResponseEntity<ResponseStructure<String>>(rs,HttpStatus.NOT_ACCEPTABLE);
+	}
 	//Handle Validation Exceptions
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ResponseStructure<Map<String, String>>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){

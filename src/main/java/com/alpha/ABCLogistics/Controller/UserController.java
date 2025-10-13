@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alpha.ABCLogistics.DTO.OrderDto;
@@ -22,5 +23,9 @@ public class UserController {
 	@PostMapping("/saveorder")
 	public ResponseEntity<ResponseStructure<Orders>> saveOrder(@RequestBody @Valid OrderDto orderDto) {
 		return orderService.saveOrder(orderDto);
+	}
+	@PostMapping("/cancelorder")
+	public ResponseEntity<ResponseStructure<Orders>> cancelOrder(@RequestParam int id) {
+		return orderService.cancelOrder(id);
 	}
 }

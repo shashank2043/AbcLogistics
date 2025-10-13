@@ -6,11 +6,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class OrderDto {
+	@NotNull
+	@Positive
 	private int id;
+	@NotNull
 	private String orderdate;
 	@Email
 	private String email;
 	private int cargoId;
+	@NotNull
 	private String cargoName;
 	private String cargoDescription;
 	@NotNull

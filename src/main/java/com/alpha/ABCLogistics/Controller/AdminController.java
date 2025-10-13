@@ -59,7 +59,7 @@ public class AdminController {
 	}
 	//Carrier Routes
 	@PostMapping("/savecarrier")
-	public ResponseEntity<ResponseStructure<Carrier>> saveCarrier(@RequestBody Carrier carrier) {
+	public ResponseEntity<ResponseStructure<Carrier>> saveCarrier(@RequestBody @Valid Carrier carrier) {
 		return carrierService.saveCarrier(carrier);
 	}
 	@GetMapping("/findcarrier")
@@ -89,7 +89,7 @@ public class AdminController {
 	}
 	//Driver Routes
 	@PostMapping("/savedriver")
-	public ResponseEntity<ResponseStructure<Driver>> saveDriver(@RequestBody DriverDto driverdto) {
+	public ResponseEntity<ResponseStructure<Driver>> saveDriver(@RequestBody @Valid DriverDto driverdto) {
 		return driverService.saveDriver(driverdto);
 	}
 	@GetMapping("/finddriver")
@@ -118,11 +118,11 @@ public class AdminController {
 		return orderService.updateOrder(orderid,truckid);
 	}
 	@PutMapping("/updateorder/{orderid}/updateLoading")
-	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateLoading(@PathVariable int orderid,@RequestBody LoadingDto ldto) {
+	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateLoading(@PathVariable int orderid,@RequestBody @Valid LoadingDto ldto) {
 		return orderService.updateOrderupdateLoading(orderid,ldto);
 	}
 	@PutMapping("/updateorder/{orderid}/updateUnloading")
-	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateUnloading(@PathVariable int orderid,@RequestBody LoadingDto ldto) {
+	public ResponseEntity<ResponseStructure<Orders>> updateOrderupdateUnloading(@PathVariable int orderid,@RequestBody @Valid LoadingDto ldto) {
 		return orderService.updateOrderupdateUnloading(orderid,ldto);
 	}
 }

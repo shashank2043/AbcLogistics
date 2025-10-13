@@ -1,11 +1,15 @@
 package com.alpha.ABCLogistics.DTO;
 
-import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class DriverDto {
-	@Id
+	@NotNull
+	@Positive
 	private int id;
 	private String name;
+	@NotNull
+	@Positive
 	private long contact;
 	public DriverDto(int id, String name, long contact) {
 		super();
