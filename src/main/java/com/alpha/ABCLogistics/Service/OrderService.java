@@ -216,6 +216,15 @@ public class OrderService {
 		responseStructure.setData(saved);
 		responseStructure.setMessage("Order cancelled successfully");
 		responseStructure.setStatuscode(HttpStatus.ACCEPTED.value());
+		String subject ="Order Cancelled!";
+		String content = "Dear Customer,\n\n"
+			    + "We regret to inform you that your order (Order ID: " + saved.getId() + ") "
+			    + "has been successfully cancelled as per your request.\n\n"
+			    + "If you have any questions or need further assistance, please feel free to contact our customer support team.\n\n"
+			    + "Thank you for considering ABC Logistics. We hope to serve you again in the future.\n\n"
+			    + "Best regards,\n"
+			    + "ABC Logistics Team";
+		mailService.sendMail(saved.getEmail(), subject, content);
 		return new ResponseEntity<ResponseStructure<Orders>>(responseStructure, HttpStatus.ACCEPTED);
 	}
 }
